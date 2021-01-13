@@ -25,9 +25,15 @@ struct Student {
 
 }
 
-struct StudentRepository {
+struct TXTStudentRepository {
     
-    func findAll(_ file: String) -> [Int:Student] {
+    private let file: String
+    
+    init(_ file: String) {
+        self.file = file
+    }
+    
+    func findAll() -> [Int:Student] {
            
         var students = [Int:Student]()
         do {
@@ -45,7 +51,7 @@ struct StudentRepository {
         return students
     }
 
-    func saveAll(_ students: [Int:Student], _ file: String) {
+    func saveAll(_ students: [Int:Student]) {
 
         var rows = [String]()
         for student in students.values {
@@ -56,17 +62,17 @@ struct StudentRepository {
     }
 }
 
-/// ---Setup App---------------------------------------------------
+/// ---Config App---------------------------------------------------
 
 let file = Bundle.main.path(forResource: "list", ofType: "txt")!
+let studentRepository = TXTStudentRepository(file)
 
 /// ---Main code---------------------------------------------------
 
-let studentRepository = StudentRepository()
-let students = studentRepository.findAll(file)
+let students = studentRepository.findAll()
 
 for student in students.values {
     print("\(student.fullName) \(student.birthDate)")
 }
 
-studentRepository.saveAll(students, file)
+studentRepository.saveAll(students)
