@@ -24,8 +24,8 @@ func loadStudentsFromTxt(_ file: String) -> [Int:[String:String]] {
     return students
 }
 
-func getFullName(_ firtsName: String, _ lastName: String) -> String {
-    return "\(firtsName) \(lastName)"
+func getFullName(_ student: [String:String]) -> String {
+    return "\(String(student["firstName"]!)) \(String(student["lastName"]!))"
 }
 
 /// ---Setup App---------------------------------------------------
@@ -36,6 +36,6 @@ let file = Bundle.main.path(forResource: "list", ofType: "txt")!
 
 let students = loadStudentsFromTxt(file)
 
-for student in students.values {
-    print(getFullName(student["firstName"]!, student["lastName"]!), "\(String(describing: student["birthDate"]!))")
+for (_,student) in students {
+    print(getFullName(student), "\(String(student["birthDate"]!))")
 }
