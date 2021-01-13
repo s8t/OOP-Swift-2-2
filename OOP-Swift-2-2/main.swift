@@ -7,17 +7,21 @@
 
 import Foundation
 
-//let rows: [String] = [
-//    "Ivan;Petrov;01.01.01",
-//    "Petr;Ivanov;02.02.02"
-//]
-
 let file = Bundle.main.path(forResource: "list", ofType: "txt")
 let contents = try String(contentsOfFile: file!)
 let rows = contents.split(separator:"\n")
 
-for row in rows {
+var students = [Int:[String:String]]()
+
+for (index, row) in rows.enumerated() {
     let part = row.split(separator: ";")
-    print("\(part[0]) \(part[1]) \(part[2])")
+    students[index] = [
+        "firstName" : String(part[0]),
+        "lastName" : String(part[1]),
+        "birthDate" : String(part[2])
+    ]
 }
 
+for student in students.values {
+    print("\(String(student["firstName"]!)) \(String(student["lastName"]!)) \(String(student["birthDate"]!))")
+}
