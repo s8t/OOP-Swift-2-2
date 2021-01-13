@@ -12,16 +12,17 @@ struct Student {
     var firstName : String
     var lastName : String
     var birthDate : String
-
-    init() {
-        self.firstName = ""
-        self.lastName = ""
-        self.birthDate = ""
-    }
-
-    func getFullName() -> String {
+    
+    var fullName: String {
         return "\(firstName) \(lastName)"
     }
+
+    init(_ firstName : String, _ lastName : String, _ birthDate : String) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.birthDate = birthDate
+    }
+
 }
 
 func loadStudentsFromTxt(_ file: String) -> [Int:Student] {
@@ -32,11 +33,7 @@ func loadStudentsFromTxt(_ file: String) -> [Int:Student] {
     
     for (index, row) in rows.enumerated() {
         let part = row.split(separator: ";")
-        
-        var student = Student()
-        student.firstName = String(part[0])
-        student.lastName = String(part[1])
-        student.birthDate = String(part[2])
+        let student = Student(String(part[0]), String(part[1]), String(part[2]))
         students[index] = student
     }
     return students
@@ -51,5 +48,5 @@ let file = Bundle.main.path(forResource: "list", ofType: "txt")!
 let students = loadStudentsFromTxt(file)
 
 for student in students.values {
-    print("\(student.getFullName()), \(student.birthDate)")
+    print("\(student.fullName) \(student.birthDate)")
 }
