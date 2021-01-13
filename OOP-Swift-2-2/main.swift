@@ -23,7 +23,11 @@ struct Student {
         self.birthDate = birthDate
     }
 
-    static func loadStudentsFromTxt(_ file: String) -> [Int:Student] {
+}
+
+struct StudentRepository {
+    
+    func findAll(_ file: String) -> [Int:Student] {
            
         var students = [Int:Student]()
         do {
@@ -41,8 +45,7 @@ struct Student {
         return students
     }
 
-
-    static func saveStudentsToTxt(_ students: [Int:Student], _ file: String) {
+    func saveAll(_ students: [Int:Student], _ file: String) {
 
         var rows = [String]()
         for student in students.values {
@@ -59,10 +62,11 @@ let file = Bundle.main.path(forResource: "list", ofType: "txt")!
 
 /// ---Main code---------------------------------------------------
 
-let students = Student.loadStudentsFromTxt(file)
+let studentRepository = StudentRepository()
+let students = studentRepository.findAll(file)
 
 for student in students.values {
     print("\(student.fullName) \(student.birthDate)")
 }
 
-Student.saveStudentsToTxt(students, file)
+studentRepository.saveAll(students, file)
