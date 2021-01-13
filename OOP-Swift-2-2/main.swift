@@ -7,25 +7,39 @@
 
 import Foundation
 
-func loadStudentsFromTxt(_ file: String) -> [Int:[String:String]] {
+struct Student {
+
+    var firstName : String
+    var lastName : String
+    var birthDate : String
+
+    init() {
+        self.firstName = ""
+        self.lastName = ""
+        self.birthDate = ""
+    }
+
+    func getFullName() -> String {
+        return "\(firstName) \(lastName)"
+    }
+}
+
+func loadStudentsFromTxt(_ file: String) -> [Int:Student] {
     
     let contents = try! String(contentsOfFile: file)
     let rows = contents.split(separator:"\n")
-    var students = [Int:[String:String]]()
+    var students = [Int:Student]()
     
     for (index, row) in rows.enumerated() {
         let part = row.split(separator: ";")
-        students[index] = [
-            "firstName" : String(part[0]),
-            "lastName" : String(part[1]),
-            "birthDate" : String(part[2])
-        ]
+        
+        var student = Student()
+        student.firstName = String(part[0])
+        student.lastName = String(part[1])
+        student.birthDate = String(part[2])
+        students[index] = student
     }
     return students
-}
-
-func getFullName(_ student: [String:String]) -> String {
-    return "\(String(student["firstName"]!)) \(String(student["lastName"]!))"
 }
 
 /// ---Setup App---------------------------------------------------
@@ -36,6 +50,6 @@ let file = Bundle.main.path(forResource: "list", ofType: "txt")!
 
 let students = loadStudentsFromTxt(file)
 
-for (_,student) in students {
-    print(getFullName(student), "\(String(student["birthDate"]!))")
+for student in students.values {
+    print("\(student.getFullName()), \(student.birthDate)")
 }
