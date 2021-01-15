@@ -25,13 +25,16 @@ struct Student {
 
 }
 
-struct TXTStudentRepository {
+protocol StudentRepository {
+    func findAll() -> [Int:Student]
+    func saveAll(_ students: [Int:Student])
+}
+
+struct TXTStudentRepository : StudentRepository {
     
     private let file: String
     
-    init(_ file: String) {
-        self.file = file
-    }
+    init(_ file: String) { self.file = file }
     
     func findAll() -> [Int:Student] {
            
@@ -62,10 +65,36 @@ struct TXTStudentRepository {
     }
 }
 
+struct XMLStudentRepository : StudentRepository {
+    
+    private let file: String
+    
+    init(_ file: String) { self.file = file }
+    
+    func findAll() -> [Int:Student] {
+        let students = [Int:Student]()
+        // ... impl read from file
+        return students
+    }
+
+    func saveAll(_ students: [Int:Student]) {
+        // ... impl write to file
+    }
+}
+
 /// ---Config App---------------------------------------------------
 
-let file = Bundle.main.path(forResource: "list", ofType: "txt")!
-let studentRepository = TXTStudentRepository(file)
+let type = "txt"
+let file = Bundle.main.path(forResource: "list", ofType: type)!
+var studentRepository: StudentRepository!
+switch type {
+case "txt":
+    studentRepository = TXTStudentRepository(file)
+case "xml":
+    studentRepository = XMLStudentRepository(file)
+default:
+    print("Incorrect type file:", type)
+}
 
 /// ---Main code---------------------------------------------------
 
