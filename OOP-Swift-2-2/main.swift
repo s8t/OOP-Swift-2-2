@@ -82,19 +82,26 @@ struct XMLStudentRepository : StudentRepository {
     }
 }
 
+enum DocType {
+    case txt, xml
+}
+
+struct RepositoryFactory {
+    
+    static func create(_ type: DocType, _ file: String) -> StudentRepository {
+        var studentRepository: StudentRepository
+        switch type {
+        case .txt: studentRepository = TXTStudentRepository(file)
+        case .xml: studentRepository = XMLStudentRepository(file)
+        }
+        return studentRepository
+    }
+}
+
 /// ---Config App---------------------------------------------------
 
-let type = "txt"
-let file = Bundle.main.path(forResource: "list", ofType: type)!
-var studentRepository: StudentRepository!
-switch type {
-case "txt":
-    studentRepository = TXTStudentRepository(file)
-case "xml":
-    studentRepository = XMLStudentRepository(file)
-default:
-    print("Incorrect type file:", type)
-}
+let file = Bundle.main.path(forResource: "list", ofType: "txt")
+let studentRepository = RepositoryFactory.create(DocType.txt, file ?? "")
 
 /// ---Main code---------------------------------------------------
 
